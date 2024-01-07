@@ -568,14 +568,14 @@
                         if (total_timeandratio[place].and[i].totalworktime) {
                             waitingtime_eachplace[place].totalworktime += Number(total_timeandratio[place].and[i].totalworktime);
                             waitingtime_eachplace[place].totalwaittime += Number(total_timeandratio[place].and[i].totalwaittime);
-                            waitingtime_eachplace[place].workcount++;
+                            waitingtime_eachplace[place].workcount+=waitingtime_eachpath[place].and[i].worktime.length;
                         }
                     }
                     for (let i = 0; i < All_Place.length; i++) {
                         if (total_timeandratio[i].and[place].totalworktime) {
                             waitingtime_eachplace[place].totalworktime += Number(total_timeandratio[i].and[place].totalworktime);
                             waitingtime_eachplace[place].totalwaittime += Number(total_timeandratio[i].and[place].totalwaittime);
-                            waitingtime_eachplace[place].workcount++;
+                            waitingtime_eachplace[place].workcount+=waitingtime_eachpath[i].and[place].worktime.length;
                         }
                     }
                     //地点がどの勤務登録にも登録されずに、総勤務時間が0の場合
