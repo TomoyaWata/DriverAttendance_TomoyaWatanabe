@@ -169,6 +169,16 @@
     const work_record_eachworker = new Object();//1回の勤務の情報を格納
 
 
+    //時刻比較関数
+    function compareTime(nowdate,nowtime,comdate,comtime){
+        var nowdatetime=new Date(`${nowdate} ${nowtime}`);//入力した時間
+        var comdatetime=new Date(`${comdate} ${comtime}`);//比較する時間
+        if(nowdatetime.getTime()>=comdatetime.getTime()){
+            return 0;//正確な入力ならば
+        }else{
+            return 1;//正確ではない入力ならば
+        }
+    }
 
     //表を更新するための前の表を削除処理
     function removeTable(number, day_count) {
@@ -433,6 +443,10 @@
             } else if (!start[start_place].arrive[arrive_place]) {//地点間の想定走行距離が未登録ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "想定走行距離が設定されていません";
+            }else if(day_count[number]>1&&compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//前回の退勤時間より前ならば
+                var displayArea = document.getElementById('member_info');
+                displayArea.innerHTML = "正しい値ではありません";
+                return;
             } else {
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "出勤しました";
@@ -463,6 +477,7 @@
                 work_record_eachworker[number].restfromformerwork[day_count[number]] = `-`;//消息期間
                 work_record_eachworker[number].attend = 1;//出勤状態:出勤なら1,出勤していないなら0
 
+
                 const startplace_name = All_Place[start_place].name;//出発地点の名前
                 const arriveplace_name = All_Place[arrive_place].name;//到着地点の名前
 
@@ -487,6 +502,10 @@
             } else if (work_record_eachworker[number].rest == 1) {//休憩中ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "休憩終了してから退勤してください";
+                return;
+            }else if(compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//前回の休憩終了時間よりも前ならば
+                var displayArea = document.getElementById('member_info');
+                displayArea.innerHTML = "正しい値ではありません";
                 return;
             }
             else {
@@ -666,6 +685,11 @@
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "出勤していないか、休憩中です";
                 return;
+            }else if(compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//前回の休憩または出勤時間より前ならば
+                var displayArea = document.getElementById('member_info');
+                displayArea.innerHTML = "正しい値ではありません";
+                return;
+  
             } else {
                 //出発地点名と到着地点名控える
                 const save_startplace = document.getElementById(`save_startplace${number}_${day_count[number]}`).textContent;
@@ -697,6 +721,10 @@
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "休憩中ではありません";
                 return;
+            }else if(compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//休憩開始時間より前ならば
+                var displayArea = document.getElementById('member_info');
+                displayArea.innerHTML = "正しい値ではありません";
+                return;
             } else {
                 //出発地点名と到着地点名控える
                 const save_startplace = document.getElementById(`save_startplace${number}_${day_count[number]}`).textContent;
@@ -724,6 +752,10 @@
 
             }
         }
+
+        //時系列に沿った記録にするためのバックアップする最新記録
+        work_record_eachworker[number].latestDate=date;
+        work_record_eachworker[number].latestTime=Time;
 
     }
 
