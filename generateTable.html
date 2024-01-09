@@ -69,8 +69,8 @@
                         <option value="0">到着地点選択</option>
                     </select>
                 </div>
-                <div class="one_select_loadingtime">
-                    <p>想定荷積み時間(分)</p>
+                <div class="one_select">
+                    <p>作業時間(分)</p>
                     <input type="text" id="loading_time" name="loading_time" required>
                 </div>
 
@@ -631,9 +631,6 @@
 
                 //待機率ランク表生成
                 const input_bigtable = document.getElementById("eachPlace_table");
-                const input_p = document.createElement("p");
-                input_p.innerHTML = "その地点を含むコースにおける待機率";
-                input_bigtable.appendChild(input_p);
                 const input_table = document.createElement("table");
                 input_bigtable.appendChild(input_table);
                 const input_tbody = document.createElement("tbody");
