@@ -16,12 +16,13 @@
     </div>
 
     <p>
+    <p class="title">従業員ごとの勤務表</p>
     <div class="whole_table" id="whole_table">
-        <p class="title">従業員ごとの勤務表</p>
+
     </div>
 
+    <p class="title">その地点を含むコースにおける待機率</p>
     <div class="eachPlace_table" id="eachPlace_table">
-        <p class="title">その地点を含むコースにおける待機率</p>
 
     </div>
 
@@ -68,7 +69,7 @@
                         <option value="0">到着地点選択</option>
                     </select>
                 </div>
-                <div class="one_select">
+                <div class="one_select_loadingtime">
                     <p>想定荷積み時間(分)</p>
                     <input type="text" id="loading_time" name="loading_time" required>
                 </div>
@@ -170,12 +171,12 @@
 
 
     //時刻比較関数
-    function compareTime(nowdate,nowtime,comdate,comtime){
-        var nowdatetime=new Date(`${nowdate} ${nowtime}`);//入力した時間
-        var comdatetime=new Date(`${comdate} ${comtime}`);//比較する時間
-        if(nowdatetime.getTime()>=comdatetime.getTime()){
+    function compareTime(nowdate, nowtime, comdate, comtime) {
+        var nowdatetime = new Date(`${nowdate} ${nowtime}`);//入力した時間
+        var comdatetime = new Date(`${comdate} ${comtime}`);//比較する時間
+        if (nowdatetime.getTime() >= comdatetime.getTime()) {
             return 0;//正確な入力ならば
-        }else{
+        } else {
             return 1;//正確ではない入力ならば
         }
     }
@@ -275,8 +276,8 @@
         tblBody1.appendChild(row1_3);
         const row1_4 = document.createElement("tr");
         cell = document.createElement("td");
-        if (day_count>1&&work_record_eachworker.restfromformerwork[day_count] < 660) {//11時間以上の休息期間がなければ
-            cell.setAttribute("class","alart");
+        if (day_count > 1 && work_record_eachworker.restfromformerwork[day_count] < 660) {//11時間以上の休息期間がなければ
+            cell.setAttribute("class", "alart");
         }
         cell.innerHTML = `${work_record_eachworker.restfromformerwork[day_count]}分`;
         row1_4.appendChild(cell);
@@ -443,7 +444,7 @@
             } else if (!start[start_place].arrive[arrive_place]) {//地点間の想定走行距離が未登録ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "想定走行距離が設定されていません";
-            }else if(day_count[number]>1&&compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//前回の退勤時間より前ならば
+            } else if (day_count[number] > 1 && compareTime(date, Time, work_record_eachworker[number].latestDate, work_record_eachworker[number].latestTime)) {//前回の退勤時間より前ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "正しい値ではありません";
                 return;
@@ -503,7 +504,7 @@
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "休憩終了してから退勤してください";
                 return;
-            }else if(compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//前回の休憩終了時間よりも前ならば
+            } else if (compareTime(date, Time, work_record_eachworker[number].latestDate, work_record_eachworker[number].latestTime)) {//前回の休憩終了時間よりも前ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "正しい値ではありません";
                 return;
@@ -523,7 +524,7 @@
 
                 //総勤務時間
                 var class_startdate = new Date(`${work_record_eachworker[number].startdate[day_count[number]]} ${work_record_eachworker[number].starttime[day_count[number]]}`);
-                var class_finishdate = new Date(`${date}, ${Time}`);
+                var class_finishdate = new Date(`${date} ${Time}`);
                 var total_worktime_second = class_finishdate.getTime() - class_startdate.getTime();
                 var total_worktime_minute = total_worktime_second / (60 * 1000);
                 work_record_eachworker[number].total_worktime_minute[day_count[number]] = total_worktime_minute;
@@ -587,14 +588,14 @@
                         if (total_timeandratio[place].and[i].totalworktime) {
                             waitingtime_eachplace[place].totalworktime += Number(total_timeandratio[place].and[i].totalworktime);
                             waitingtime_eachplace[place].totalwaittime += Number(total_timeandratio[place].and[i].totalwaittime);
-                            waitingtime_eachplace[place].workcount+=waitingtime_eachpath[place].and[i].worktime.length;
+                            waitingtime_eachplace[place].workcount += waitingtime_eachpath[place].and[i].worktime.length;
                         }
                     }
                     for (let i = 0; i < All_Place.length; i++) {
                         if (total_timeandratio[i].and[place].totalworktime) {
                             waitingtime_eachplace[place].totalworktime += Number(total_timeandratio[i].and[place].totalworktime);
                             waitingtime_eachplace[place].totalwaittime += Number(total_timeandratio[i].and[place].totalwaittime);
-                            waitingtime_eachplace[place].workcount+=waitingtime_eachpath[i].and[place].worktime.length;
+                            waitingtime_eachplace[place].workcount += waitingtime_eachpath[i].and[place].worktime.length;
                         }
                     }
                     //地点がどの勤務登録にも登録されずに、総勤務時間が0の場合
@@ -685,11 +686,11 @@
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "出勤していないか、休憩中です";
                 return;
-            }else if(compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//前回の休憩または出勤時間より前ならば
+            } else if (compareTime(date, Time, work_record_eachworker[number].latestDate, work_record_eachworker[number].latestTime)) {//前回の休憩または出勤時間より前ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "正しい値ではありません";
                 return;
-  
+
             } else {
                 //出発地点名と到着地点名控える
                 const save_startplace = document.getElementById(`save_startplace${number}_${day_count[number]}`).textContent;
@@ -721,7 +722,7 @@
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "休憩中ではありません";
                 return;
-            }else if(compareTime(date,Time,work_record_eachworker[number].latestDate,work_record_eachworker[number].latestTime)){//休憩開始時間より前ならば
+            } else if (compareTime(date, Time, work_record_eachworker[number].latestDate, work_record_eachworker[number].latestTime)) {//休憩開始時間より前ならば
                 var displayArea = document.getElementById('member_info');
                 displayArea.innerHTML = "正しい値ではありません";
                 return;
@@ -754,8 +755,8 @@
         }
 
         //時系列に沿った記録にするためのバックアップする最新記録
-        work_record_eachworker[number].latestDate=date;
-        work_record_eachworker[number].latestTime=Time;
+        work_record_eachworker[number].latestDate = date;
+        work_record_eachworker[number].latestTime = Time;
 
     }
 
