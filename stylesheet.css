@@ -47,6 +47,10 @@ h5{
   align-items: center;
 }
 
+.one_select_loadingtime p{
+  font-size: 80%;
+}
+
 .notUseInRest{
   background-color: #fff;
   width:48%;
@@ -81,7 +85,7 @@ h5{
 }
 
 .eachPlace_table table{
-  width:600px;
+  width:70%;
   margin:auto;
 }
 
@@ -97,13 +101,13 @@ h5{
   float:left;
 }
 .one_table_date,.one_table_waitingtime{
-  width:15%;
+  width:14%;
 }
 .one_table_worktime,.one_table_resttime{
-  width:20%;
+  width:18%;
 }
 .one_table_real_worktime{
-  width:30%;
+  width:27%;
 }
 
 
